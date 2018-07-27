@@ -3,6 +3,7 @@ var Schema=mongoose.Schema;
 
 var booth=new Schema({
     boothAddress:String,
+    number: Strib
     district:String,
     constituency:Number,
 });
