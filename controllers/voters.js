@@ -26,7 +26,6 @@ module.exports={
         var pkHash=req.body.id;
         var boothAddress=req.body.booth_address;
 
-        console.log("hey");
         //  Check for the voter to be in the list.
 
 
