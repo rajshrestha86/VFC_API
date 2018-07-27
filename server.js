@@ -25,7 +25,8 @@ app.use('/voter', auth);
 // TO DO: Setup endpoints ...
 var routes=require('./routes/default'),
 voter_routes=require('./routes/voters'),
-candidate_routes=require('./routes/candidate');
+candidate_routes=require('./routes/candidate'),
+district_routes=require('./routes/districts');
 
 
 
@@ -59,6 +60,7 @@ app.use(bodyParser.json());
 app.use('/', routes);
 app.use('/voter', voter_routes);
 app.use('/candidate', candidate_routes);
+app.use('/districts', district_routes);
 
 
 
