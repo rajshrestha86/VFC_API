@@ -6,7 +6,6 @@ var fs = require('fs');
 router.route('/')
     .post(function (req, res) {
         var reqs = req.body;
-        console.log(req.body);
         userModel.findOne({ username: reqs.adminID, password: reqs.password, role: "Admin" }, function (err, result) {
             if (!err) {
                 if (result) {

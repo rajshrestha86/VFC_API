@@ -26,7 +26,7 @@ module.exports={
         var pkHash=req.body.id;
         var boothAddress=req.body.booth_address;
 
-
+        console.log("hey");
         //  Check for the voter to be in the list.
 
 
@@ -67,7 +67,7 @@ module.exports={
                             expiresIn:10*60         // Expires in 10 minutes.
                         })
             
-
+                        console.log("found");
                         // This token and user id is required to change voter status.
                         res.status(200).send({
                             'token':token,
