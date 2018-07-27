@@ -31,7 +31,7 @@ module.exports={
 
 
         //  Check if the request is coming from authorized booth.
-        booth_model.findOne({boothAddress}, function(err, result){
+        booth_model.findById(boothAddress, function(err, result){
             if(err)
                 res.status(401).send(err);
 

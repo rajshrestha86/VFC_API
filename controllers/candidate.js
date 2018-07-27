@@ -6,15 +6,26 @@ module.exports={
     fetch_fptp_candidate: function(req, res){
         const booth_id=req.headers['booth_id']
         const type=req.params.type;         // Type must be either hor or pa
+        let constituency=0;
         
         console.log(type.toUpperCase());
         if((type=='hor') || type=='pa'){
-            
+
                 // Gets candidate from the booth address and constituency.
-                booth_model.findOne({boothAddress: booth_id}, function(err, result){
+                booth_model.findById(booth_id, function(err, result){
                     if(!err){
                         if(result!=null){
-                            fptp_candidate_model.find({district: result.district, constituency: result.constituency, electedfor: type.toUpperCase() }, function(err, results){
+                            if(type=='hor')
+                            {
+                                if(result.constituency%2==0)
+                                    constituency=result.constituency/2;
+                                else
+                                    constituency=(result.constituency+1)/2;
+                            }
+                            else
+                                constituency=result.constituency;
+                                
+                            fptp_candidate_model.find({district: result.district, constituency: constituency, electedfor: type.toUpperCase() }, function(err, results){
                                 if(!err)
                                     res.status(200).send(results);
                             })
@@ -34,7 +45,7 @@ module.exports={
 
     fetch_pr_candidate: function(req, res){
         const booth_id=req.headers['booth_id']
-        booth_model.findOne({_id: booth_id}, function(err, result){
+        booth_model.findById(booth_id, function(err, result){
             if(!err){
                 if(result!=null){
                     pr_candidate_model.find({district: result.district, constituency: result.constituency}, function(err, results){
