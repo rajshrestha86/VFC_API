@@ -12,7 +12,7 @@ module.exports={
         if((type=='hor') || type=='pa'){
 
                 // Gets candidate from the booth address and constituency.
-                booth_model.findOne({boothAddress: booth_id}, function(err, result){
+                booth_model.findById(booth_id, function(err, result){
                     if(!err){
                         if(result!=null){
                             if(type=='hor')
@@ -45,7 +45,7 @@ module.exports={
 
     fetch_pr_candidate: function(req, res){
         const booth_id=req.headers['booth_id']
-        booth_model.findOne({_id: booth_id}, function(err, result){
+        booth_model.findById(booth_id, function(err, result){
             if(!err){
                 if(result!=null){
                     pr_candidate_model.find({district: result.district, constituency: result.constituency}, function(err, results){
