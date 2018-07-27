@@ -15,11 +15,18 @@ const options = {
     key: fs.readFileSync('./ssl/localhost.key')
 };
 
-
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 
 // Middleware
 var auth=require('./auth');
 app.use('/voter', auth);
+var register_booth = require('./controllers/booth_register')
 
 
 // TO DO: Setup endpoints ...
@@ -60,6 +67,7 @@ app.use(bodyParser.json());
 app.use('/', routes);
 app.use('/voter', voter_routes);
 app.use('/candidate', candidate_routes);
+app.use('/register-booth', register_booth)
 app.use('/districts', district_routes);
 
 
