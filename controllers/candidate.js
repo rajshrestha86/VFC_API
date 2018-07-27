@@ -4,7 +4,7 @@ var booth_model=require('../models/booth');
 
 module.exports={
     fetch_fptp_candidate: function(req, res){
-        const booth_id=req.headers['booth_id']
+        const booth_address=req.headers['booth_address']
         const type=req.params.type;         // Type must be either hor or pa
         let constituency=0;
         
@@ -12,7 +12,7 @@ module.exports={
         if((type=='hor') || type=='pa'){
 
                 // Gets candidate from the booth address and constituency.
-                booth_model.findById(booth_id, function(err, result){
+                booth_model.findById(booth_address, function(err, result){
                     if(!err){
                         if(result!=null){
                             if(type=='hor')
@@ -44,8 +44,8 @@ module.exports={
     },
 
     fetch_pr_candidate: function(req, res){
-        const booth_id=req.headers['booth_id']
-        booth_model.findById(booth_id, function(err, result){
+        const booth_address=req.headers['booth_address']
+        booth_model.findById(booth_address, function(err, result){
             if(!err){
                 if(result!=null){
                     pr_candidate_model.find({district: result.district, constituency: result.constituency}, function(err, results){
