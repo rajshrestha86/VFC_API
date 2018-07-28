@@ -7,7 +7,10 @@ module.exports={
         const booth_address=req.headers['booth_address']
         const type=req.params.type;         // Type must be either hor or pa
         let constituency=0;
-        
+        console.log(booth_address);
+        if(booth_address==undefined){
+            res.send(401).send('Booth not authorized for the request.');
+        }
         console.log(type.toUpperCase());
         if((type=='hor') || type=='pa'){
 
@@ -44,20 +47,73 @@ module.exports={
     },
 
     fetch_pr_candidate: function(req, res){
-        const booth_address=req.headers['booth_address']
-        booth_model.findById(booth_address, function(err, result){
-            if(!err){
-                if(result!=null){
-                    pr_candidate_model.find({district: result.district, constituency: result.constituency}, function(err, results){
-                        if(!err)
-                            res.status(200).send(results);
-                    })
-                }
-            }
-            else{
-                res.send(401).send(err)
-            }
-        })
+
+        const booth_address=req.get('booth_address')
+        const type=req.params.type;         // Type must be either hor or pa
+        let constituency=0;
+
+        console.log(booth_address);
+        if(booth_address==undefined){
+            res.send(401).send('Booth not authorized for the request.');
+        }
+        
+        console.log(type.toUpperCase());
+        if((type=='hor') || type=='pa'){
+
+                // Gets candidate from the booth address and constituency.
+                booth_model.findById(booth_address, function(err, result){
+                    if(!err){
+                        if(result!=null){
+                            console.log(result.district);
+                            if(type=='hor')
+                            {
+                                if(result.constituency%2==0)
+                                    constituency=result.constituency/2;
+                                else
+                                    constituency=(result.constituency+1)/2;
+                            }
+                            else
+                                constituency=result.constituency;
+                                
+                            pr_candidate_model.find({district: result.district, constituency: constituency, electedfor: type.toUpperCase()}, function(err, results){
+                                if(!err)
+                                    res.status(200).send(results);
+                            })
+                        }
+
+                        else{
+                            res.send(401).send('Booth not authorized for the request.');
+                        }
+                    }
+                    else{
+                        res.send(401).send(err)
+                    }
+                })
+        }
+            // If booth is not in the database returns errors.
+        else {
+            res.status(401).send('Invalid Url');
+            return;
+        }
+
+
+
+
+
+        // const booth_address=req.headers['booth_address']
+        // booth_model.findById(booth_address, function(err, result){
+        //     if(!err){
+        //         if(result!=null){
+        //             pr_candidate_model.find({district: result.district, constituency: result.constituency}, function(err, results){
+        //                 if(!err)
+        //                     res.status(200).send(results);
+        //             })
+        //         }
+        //     }
+        //     else{
+        //         res.send(401).send(err)
+        //     }
+        // })
     
     },
 
