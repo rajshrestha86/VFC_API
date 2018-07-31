@@ -8,6 +8,7 @@ var controller=require('../controllers/voters');
     router.get('/all', controller.voters_list);
     router.post('/authenticate', controller.voter_authenticate);
     router.post('/voted', controller.voter_voted_status);
+    
 
 
 module.exports =router;

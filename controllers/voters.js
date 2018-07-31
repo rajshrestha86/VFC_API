@@ -102,6 +102,7 @@ module.exports={
 
                     // If the user has already Voted we response a already voted message.
                     if(result.voted){
+                        console.log('Already Voted. #####################################')
                         res.status(401).send({
                             'message': 'Already Voted.'
                         })
@@ -124,46 +125,68 @@ module.exports={
             token, usename in header. This is obtained after the authorization.
             */
     voter_voted_status: function(req, res){
-        console.log("voter status change", req.body);
-        const user_id = req.body.user_id;
+        const username = req.body.username;
+        console.log(username)
         const add1 = req.body.fptp_hor_ethAddress;
         const add2 = req.body.fptp_pa_ethAddress;
         const add3 = req.body.pr_hor_ethAddress;
         const add4 = req.body.pr_pa_ethAddress;
-        voter_model.findById(user_id, function(err, result){
-            if(!err)
-            {
-                console.log(result);
-                if(result!=null){
-                    console.log('found voter ');
-                    result.voted=true;
-                    result.save();
-                    config.db.insert({ voter_address: result.ethAddress, candidate_address: add1, txHash: null, timestamp: Date.now() });
-                    config.db.insert({ voter_address: result.ethAddress, candidate_address: add2, txHash: null, timestamp: Date.now() });
-                    config.db.insert({ voter_address: result.ethAddress, candidate_address: add3, txHash: null, timestamp: Date.now() });
-                    config.db.insert({ voter_address: result.ethAddress, candidate_address: add4, txHash: null, timestamp: Date.now() });
-                    res.json({
-                        status: true,
-                        message: "User voted status changed.",
-                        id: result.id
-                    });
+        const token = req.body.token;
+        console.log('################################ ', token);
 
-                }
-                else
-                {
-                    res.json({
-                        status: false,
-                        message: "User Not found"
-
+        if(token){
+            jwt.verify(token, config.secret, function(error, decoded){
+                if(error){
+                    console.log('Verification Error')
+                    return res.status(401).send(error)
+                }else {
+                    req.decoded=decoded
+                    voter_model.findById(username, function(err, result){
+                        if(!err)
+                        {
+                            console.log(result);
+                            if(result!=null){
+                                console.log('found voter ');
+                                result.voted=true;
+                                result.save();
+                                config.db.insert({ voter_address: result.ethAddress, candidate_address: add1, txHash: null, timestamp: Date.now() });
+                                config.db.insert({ voter_address: result.ethAddress, candidate_address: add2, txHash: null, timestamp: Date.now() });
+                                config.db.insert({ voter_address: result.ethAddress, candidate_address: add3, txHash: null, timestamp: Date.now() });
+                                config.db.insert({ voter_address: result.ethAddress, candidate_address: add4, txHash: null, timestamp: Date.now() });
+                                res.json({
+                                    status: true,
+                                    message: "User voted status changed.",
+                                    id: result.id
+                                });
+            
+                            }
+                            else
+                            {
+                                res.json({
+                                    status: false,
+                                    message: "User Not found in the Database"
+            
+                                })
+                            }
+                        }
+            
+                        else
+                        {
+                            res.send(err)
+                        }
                     })
+                    
                 }
-            }
+            })
+        }else{
+            console.log('Error');
+            res.redirect(401,'/')
+        }
 
-            else
-            {
-                res.send(err)
-            }
-        })
+
+
+
+        
         
 
     }

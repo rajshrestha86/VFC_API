@@ -8,6 +8,7 @@ http=require('http'),
 https=require('https');
 var Web3 = require('web3');
 var config = require('./config');
+var cors=require('cors')
 
 
 // SSL CERTIFICATES
@@ -16,19 +17,25 @@ const options = {
     key: fs.readFileSync('./ssl/localhost.key')
 };
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, booth_address, token, username, fptp_hor_ethaddress, fptp_pa_ethaddress, pr_hor_ethaddress, pr_pa_ethaddress');
-    //res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
+// app.use(function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, booth_address, token, username, fptp_hor_ethAddress, fptp_pa_ethAddress, pr_hor_ethAddress, pr_pa_ethAddress, test');
+//     res.header('Access-Control-Expose-Headers', ' booth_address, token, username, fptp_hor_ethAddress, fptp_pa_ethAddress, pr_hor_ethAddress, pr_pa_ethAddress, test');
+    
+//     //res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     next();
+// });
+
+
+app.use(cors());
 
 // Middleware
 var auth=require('./auth');
-app.use('/voter', auth);
+// app.use('/voter', auth);
 var register_booth = require('./controllers/booth_register')
+
 
 
 // TO DO: Setup endpoints ...
