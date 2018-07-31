@@ -19,7 +19,7 @@ const options = {
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,booth_address');
+    res.setHeader('Access-Control-Allow-Headers', 'booth_address, token, pkHash, fptp_hor_ethAddress, fptp_pa_ethAddress, pr_hor_ethAddress, pr_pa_ethAddress');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
