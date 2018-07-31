@@ -3,7 +3,7 @@ var config=require('./config.js')
 
 
 module.exports=function(req, res, next){
-    var token=req.headers['x-access-token']
+    var token=req.headers['token']
     console.log(req.headers)
 
     if(token){
