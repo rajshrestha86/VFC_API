@@ -56,9 +56,9 @@ module.exports={
 
             const hash = crypto.createHash('sha256');
             console.log('Type of pkDecrypted: ', (pkDecrypted.trim()).length)
-            for(var i=0; i<pkDecrypted.length; i++){
-                console.log(pkDecrypted[i]);
-            }
+            // for(var i=0; i<pkDecrypted.length; i++){
+            //     console.log(pkDecrypted[i]);
+            // }
             hash.update(pkDecrypted.toString());
             pkHash = hash.digest('hex');
             console.log('Hashed PK: ', pkHash);
