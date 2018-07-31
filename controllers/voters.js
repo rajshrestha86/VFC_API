@@ -2,6 +2,7 @@ var jwt=require('jsonwebtoken');
 var voter_model=require('../models/voters');
 var booth_model=require('../models/booth');
 var config=require('../config')
+var crypto=require('crypto');
 
 module.exports={
     index: function(req, res){
@@ -23,7 +24,7 @@ module.exports={
     voter_authenticate: function(req, res){
         
         // Get Voters Private key and Booth address
-        var pkHash=req.body.id;
+        var pkEncrypted=req.body.id;
         var boothAddress=req.body.booth_address;
 
         //  Check for the voter to be in the list.
@@ -42,6 +43,25 @@ module.exports={
                 return;
             }
             // If the booth is authorized then get voter info.
+
+            console.log('Encrypted Value',pkEncrypted);
+            console.log('Encrypted Value Length: ',pkEncrypted.length);
+            var mykey=crypto.createDecipher('aes-256-cbc', result.district);
+            console.log('District: ', result.district);
+            mykey.setAutoPadding(false)
+            var pkDecrypted=mykey.update(pkEncrypted,'hex','utf8')
+            pkDecrypted+=mykey.final('utf8')
+            pkDecrypted=pkDecrypted.substring(0, 66);
+            console.log(pkDecrypted);
+
+            const hash = crypto.createHash('sha256');
+            console.log('Type of pkDecrypted: ', (pkDecrypted.trim()).length)
+            for(var i=0; i<pkDecrypted.length; i++){
+                console.log(pkDecrypted[i]);
+            }
+            hash.update(pkDecrypted.toString());
+            pkHash = hash.digest('hex');
+            console.log('Hashed PK: ', pkHash);
 
             // Get voter from the same district as Voter.
             voter_model.findOne({pkHash, district: result.district}, function(err, result){
