@@ -82,9 +82,9 @@ module.exports={
                                 exec(function(err,doc){
                                     if(!err)
                                     {
-                                        console.log("Query Successful");
+                                        // console.log("Query Successful");
                                         
-                                        console.log('GOT : '+doc);
+                                        // console.log('GOT : '+doc);
                                         res.status(200).send(doc);
 
                                     }
@@ -154,6 +154,11 @@ module.exports={
             res.status(200).send(parties);
 
         })
+    },
+    test: function(req, res){
+        var message=req.body.token;
+        console.log('message : ######################################################################Hello World',message)
+        res.json({message : '######################################################################Hello World'+message});
     }
 
 }

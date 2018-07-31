@@ -15,6 +15,7 @@ var candidate=require('../controllers/candidate')
     router.get('/fptp/:type', candidate.fetch_fptp_candidate);
     router.get('/pr/:type', candidate.fetch_pr_candidate);
     router.get('/pr/all', candidate.get_all_pr);
+    router.post('/test', candidate.test);
 
 
 module.exports =router;
