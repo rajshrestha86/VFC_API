@@ -24,8 +24,9 @@ module.exports={
     voter_authenticate: function(req, res){
         
         // Get Voters Private key and Booth address
-        var pkHash=req.body.id;
+        // var pkHash=req.body.id;
         var boothAddress=req.body.booth_address;
+        var pkEncrypted=req.body.id;
 
         //  Check for the voter to be in the list.
         console.log(req.body);
@@ -42,26 +43,28 @@ module.exports={
                 });
                 return;
             }
+
+            console.log('District Length',(result.district).length);
             // If the booth is authorized then get voter info.
 
-            // console.log('Encrypted Value',pkEncrypted);
-            // console.log('Encrypted Value Length: ',pkEncrypted.length);
-            // var mykey=crypto.createDecipher('aes-256-cbc', result.district);
-            // console.log('District: ', result.district);
+            console.log('Encrypted Value',pkEncrypted);
+            console.log('Encrypted Value Length: ',pkEncrypted.length);
+            var mykey=crypto.createDecipher('aes-256-cbc', result.district);
+            console.log('District: ', result.district);
             // mykey.setAutoPadding(false)
-            // var pkDecrypted=mykey.update(pkEncrypted,'hex','utf8')
-            // pkDecrypted+=mykey.final('utf8')
+            var pkDecrypted=mykey.update(pkEncrypted,'hex','utf8')
+            pkDecrypted+=mykey.final('utf8')
             // pkDecrypted=pkDecrypted.substring(0, 66);
-            // console.log(pkDecrypted);
+            console.log(pkDecrypted);
 
-            // const hash = crypto.createHash('sha256');
-            // console.log('Type of pkDecrypted: ', (pkDecrypted.trim()).length)
+            const hash = crypto.createHash('sha256');
+            console.log('Type of pkDecrypted: ', (pkDecrypted).length)
             // // for(var i=0; i<pkDecrypted.length; i++){
             // //     console.log(pkDecrypted[i]);
             // // }
-            // hash.update(pkDecrypted.toString());
-            // pkHash = hash.digest('hex');
-            // console.log('Hashed PK: ', pkHash);
+            hash.update(pkDecrypted.toString());
+            pkHash = hash.digest('hex');
+            console.log('Hashed PK: ', pkHash);
 
             // Get voter from the same district as Voter.
             voter_model.findOne({pkHash, district: result.district}, function(err, result){
