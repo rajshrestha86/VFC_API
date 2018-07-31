@@ -1,5 +1,6 @@
 var fptp_candidate_model=require('../models/fptp_candidate');
 var pr_candidate_model=require('../models/pr_candidate');
+var pr_party_model=require('../models/pr_party_model');
 var booth_model=require('../models/booth');
 
 module.exports={
@@ -74,11 +75,26 @@ module.exports={
                             }
                             else
                                 constituency=result.constituency;
-                                
-                            pr_candidate_model.find({district: result.district, constituency: constituency, electedfor: type.toUpperCase()}, function(err, results){
-                                if(!err)
-                                    res.status(200).send(results);
-                            })
+                            
+                            console.log(constituency);
+                            console.log("Accessing DB now");
+                            pr_candidate_model.find({district: result.district, constituency: constituency, electedfor: type.toUpperCase()}).populate({ path: 'parties', model: pr_party_model }).
+                                exec(function(err,doc){
+                                    if(!err)
+                                    {
+                                        console.log("Query Successful");
+                                        
+                                        console.log('GOT : '+doc);
+                                        res.status(200).send(doc);
+
+                                    }
+                                    else{
+
+                                        console.log(err);
+                                    }
+                                    
+                                        
+                            });
                         }
 
                         else{
