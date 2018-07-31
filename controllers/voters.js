@@ -121,12 +121,13 @@ module.exports={
             token, usename in header. This is obtained after the authorization.
             */
     voter_voted_status: function(req, res){
-        const pkHash = req.header['pkHash'];
-        const add1 = req.header['fptp_hor_ethAddress'];
-        const add2 = req.header['fptp_pa_ethAddress'];
-        const add3 = req.header['pr_hor_ethAddress'];
-        const add4 = req.header['pr_pa_ethAddress']
-        voter_model.findOne({pkHash: pkHash}, function(err, result){
+        console.log("voter status change", req.body);
+        const user_id = req.body.user_id;
+        const add1 = req.body.fptp_hor_ethAddress;
+        const add2 = req.body.fptp_pa_ethAddress;
+        const add3 = req.body.pr_hor_ethAddress;
+        const add4 = req.body.pr_pa_ethAddress;
+        voter_model.findById(user_id, function(err, result){
             if(!err)
             {
                 if(result!=null){
