@@ -3,9 +3,9 @@ var config=require('./config.js')
 
 
 module.exports=function(req, res, next){
-    console.log("sfashfasdgashhhhhhhhhhhhhhhhhsssss");
-    var token=req.body.token;
+    console.log("\n*****************************************************\n");
     console.log("headrs and body",req.headers, req.body);
+    var token=req.body.token;
 
     if(token){
         jwt.verify(token, config.secret, function(error, decoded){
