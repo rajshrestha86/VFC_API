@@ -24,8 +24,9 @@ module.exports={
     voter_authenticate: function(req, res){
         
         // Get Voters Private key and Booth address
-        var pkEncrypted=req.body.id;
+        // var pkHash=req.body.id;
         var boothAddress=req.body.booth_address;
+        var pkEncrypted=req.body.id;
 
         //  Check for the voter to be in the list.
         console.log(req.body);
@@ -42,23 +43,25 @@ module.exports={
                 });
                 return;
             }
+
+            console.log('District Length',(result.district).length);
             // If the booth is authorized then get voter info.
 
             console.log('Encrypted Value',pkEncrypted);
             console.log('Encrypted Value Length: ',pkEncrypted.length);
             var mykey=crypto.createDecipher('aes-256-cbc', result.district);
             console.log('District: ', result.district);
-            mykey.setAutoPadding(false)
+            // mykey.setAutoPadding(false)
             var pkDecrypted=mykey.update(pkEncrypted,'hex','utf8')
             pkDecrypted+=mykey.final('utf8')
-            pkDecrypted=pkDecrypted.substring(0, 66);
+            // pkDecrypted=pkDecrypted.substring(0, 66);
             console.log(pkDecrypted);
 
             const hash = crypto.createHash('sha256');
-            console.log('Type of pkDecrypted: ', (pkDecrypted.trim()).length)
-            // for(var i=0; i<pkDecrypted.length; i++){
-            //     console.log(pkDecrypted[i]);
-            // }
+            console.log('Type of pkDecrypted: ', (pkDecrypted).length)
+            // // for(var i=0; i<pkDecrypted.length; i++){
+            // //     console.log(pkDecrypted[i]);
+            // // }
             hash.update(pkDecrypted.toString());
             pkHash = hash.digest('hex');
             console.log('Hashed PK: ', pkHash);
@@ -130,8 +133,10 @@ module.exports={
         voter_model.findById(user_id, function(err, result){
             if(!err)
             {
+                console.log(result);
                 if(result!=null){
-                    result.voted=!result.voted;
+                    console.log('found voter ');
+                    result.voted=true;
                     result.save();
                     config.db.insert({ voter_address: result.ethAddress, candidate_address: add1, txHash: null, timestamp: Date.now() });
                     config.db.insert({ voter_address: result.ethAddress, candidate_address: add2, txHash: null, timestamp: Date.now() });

@@ -19,7 +19,8 @@ const options = {
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,booth_address');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, booth_address, token, username, fptp_hor_ethaddress, fptp_pa_ethaddress, pr_hor_ethaddress, pr_pa_ethaddress');
+    //res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
