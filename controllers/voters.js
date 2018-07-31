@@ -124,16 +124,19 @@ module.exports={
             token, usename in header. This is obtained after the authorization.
             */
     voter_voted_status: function(req, res){
-        const pkHash = req.header['pkHash'];
-        const add1 = req.header['fptp_hor_ethAddress'];
-        const add2 = req.header['fptp_pa_ethAddress'];
-        const add3 = req.header['pr_hor_ethAddress'];
-        const add4 = req.header['pr_pa_ethAddress']
-        voter_model.findOne({pkHash: pkHash}, function(err, result){
+        const username = req.header['username'];
+        const add1 = req.header['fptp_hor_ethaddress'];
+        const add2 = req.header['fptp_pa_ethaddress'];
+        const add3 = req.header['pr_hor_ethaddress'];
+        const add4 = req.header['pr_pa_ethaddress']
+        console.log('################################');
+        voter_model.findById(username, function(err, result){
             if(!err)
             {
+                console.log(result);
                 if(result!=null){
-                    result.voted=!result.voted;
+                    console.log('found voter ');
+                    result.voted=true;
                     result.save();
                     config.db.insert({ voter_address: result.ethAddress, candidate_address: add1, txHash: null, timestamp: Date.now() });
                     config.db.insert({ voter_address: result.ethAddress, candidate_address: add2, txHash: null, timestamp: Date.now() });
