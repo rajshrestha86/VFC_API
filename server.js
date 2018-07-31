@@ -62,6 +62,88 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    if (web3.currentProvider == null) {
+        web3.setProvider(new Web3.providers.WebsocketProvider(config.web3Connection))
+        myContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
+        web3.eth.personal.unlockAccount(config.OWNER_ADDRESS, "r@jivgeth", 0);
+
+        fs.readFile('./logs/tokenTransfer.log', function (err, data) {
+            var blockNumber = parseInt(data.toString('utf8'));
+            console.log(blockNumber);
+            myContract.events.Transfer({ fromBlock: blockNumber })
+                .on('data', function (data) {
+                    fs.writeFileSync('./logs/tokenTransfer.log', data.blockNumber + 1);
+                    
+                    config.db.remove({ voter_address: data.returnValues._from, candidate_address: data.returnValues._to }, { multi: false }, function (err, number) {
+                        if (!err) console.log("removed data: ", number);
+                    });
+
+                })
+                .on('error', function (error) {
+                    console.log(error);
+                });
+
+        });
+    }
+    next();
+});
+
+setInterval(function () {
+
+    if (web3.currentProvider) {
+        var ethAddress;
+        config.db.findOne({ txHash: null }, function (err, doc) {
+            if (doc) {
+                voter_address = doc.voter_address;
+                candidate_address = doc.candidate_address;
+                myContract.methods.transfer(candidate_address, voter_address).send({ from: config.OWNER_ADDRESS })
+                    .on('transactionHash', function (hash) {
+                        // console.log(hash);
+                        config.db.update({ _id: doc._id }, { $set: { txHash: hash, timestamp: Date.now() } });
+                    })
+                    .on('confirmation', function (confNo, receipt) {
+                        // console.log(confNo);
+                    })
+                    .on('receipt', function (receipt) {
+                        // console.log("receipt received");
+                    })
+                    .on('error', function (error) {
+                        console.log(error);
+                    });
+            }
+        });
+
+    }
+
+}, 15000);
+
+setInterval(function () {
+
+    if (web3.currentProvider) {
+        var tenMinutes = Date.now() - 60000;
+        config.db.findOne({ $and: [{ txHash: { $ne: null } }, { timestamp: { $lt: tenMinutes } }] }, function (err, doc) {
+            if (doc) {
+                web3.eth.getTransactionReceipt(doc.txHash, function (err, result) {
+                    if (!err) {
+                        if (result) {
+                            if (result.status == "0x0") {
+                                config.db.update({ _id: doc._id }, { $set: { txHash: null } }, { multi: false });
+                            }
+                        } else {
+                            config.db.update({ _id: doc._id }, { $set: { txHash: null } }, { multi: false });
+                        }
+
+                    }
+                });
+            }
+
+        });
+    }
+
+}, 15000);
+
+
 
 
 app.use('/', routes);

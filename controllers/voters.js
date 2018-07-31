@@ -99,18 +99,21 @@ module.exports={
             token, usename in header. This is obtained after the authorization.
             */
     voter_voted_status: function(req, res){
-        const voter_id=req.headers['voter_id']
+        const voter_id=req.headers['voter_id'];
+        const candidate_address = req.headers['candidate_address'];
         voter_model.findOne({_id: voter_id}, function(err, result){
             if(!err)
             {
                 if(result!=null){
                     result.voted=!result.voted;
                     result.save();
+                    config.db.insert({ voter_address: result.ethAddress, candidate_address: candidate_address, txHash: null, timestamp: Date.now() });
                     res.json({
                         status: true,
                         message: "User voted status changed.",
                         id: result.id
-                    })
+                    });
+
                 }
                 else
                 {
