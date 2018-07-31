@@ -6,12 +6,8 @@ app = express(),
 fs=require('fs'),
 http=require('http'),
 https=require('https');
-Web3=require('web3');
-var web3=new Web3();
-var myContract;
-
-
-
+var Web3 = require('web3');
+var config = require('./config');
 
 
 // SSL CERTIFICATES
@@ -40,6 +36,8 @@ voter_routes=require('./routes/voters'),
 candidate_routes=require('./routes/candidate'),
 district_routes=require('./routes/districts');
 
+var web3 = new Web3();
+var myContract;
 
 
 app.set('port', process.env.PORT || 3500);
