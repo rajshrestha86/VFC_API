@@ -6,6 +6,11 @@ app = express(),
 fs=require('fs'),
 http=require('http'),
 https=require('https');
+Web3=require('web3');
+var web3=new Web3();
+var myContract;
+
+
 
 
 
