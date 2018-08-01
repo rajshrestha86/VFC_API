@@ -69,7 +69,7 @@ module.exports={
             console.log('Hashed PK: ', pkHash);
 
             // Get voter from the same district as Voter.
-            voter_model.findOne({pkHash, district: result.district}, function(err, result){
+            voter_model.findOne({pkHash, district: result.district, constituency2:result.constituency }, function(err, result){
                 console.log("r: ", result);
                 if(err)
                 {
