@@ -7,7 +7,7 @@ module.exports={
         filename: (path.join(__dirname) + '/logs/votersLog'),
         autoload: true
     }),
-    ABI: [
+    ABI:[
         {
             "constant": false,
             "inputs": [
@@ -280,6 +280,6 @@ module.exports={
         }
     ],
     OWNER_ADDRESS: "0xe374d147ec45668ce39ae3e3725bf5d22af78463",
-    CONTRACT_ADDRESS: "0x9E8Dc9A1C1beFc0a8AE98eEE56047c02F398d785",
+    CONTRACT_ADDRESS: "0x10C378AbE90ac3A61a0C1b25E8A8f2d31212FF3D",
     web3Connection: 'http://127.0.0.1:8546'
 }

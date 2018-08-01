@@ -81,12 +81,14 @@ app.use((req, res, next) => {
 
         fs.readFile('./logs/tokenTransfer.log', function (err, data) {
             var blockNumber = parseInt(data.toString('utf8'));
-            console.log(blockNumber);
+            console.log("the block number is: ", blockNumber);
             myContract.events.Transfer({ fromBlock: blockNumber })
                 .on('data', function (data) {
+                    console.log("transfer event recieved");
                     fs.writeFileSync('./logs/tokenTransfer.log', data.blockNumber + 1);
+                    console.log(data.returnValues);
                     
-                    config.db.remove({ voter_address: data.returnValues._from, candidate_address: data.returnValues._to }, { multi: false }, function (err, number) {
+                    config.db.remove({ voter_address: data.returnValues.from, candidate_address: data.returnValues.to }, { multi: false }, function (err, number) {
                         if (!err) console.log("removed data: ", number);
                     });
 
