@@ -34,8 +34,10 @@ module.exports={
         //  Check if the request is coming from authorized booth.
         booth_model.findById(boothAddress, function(err, result){
             console.log(result);
-            if(err)
+            if(err){
                 res.status(401).send(err);
+                return;
+            }
 
             if(result==null){
                 res.status(401).send({
@@ -127,12 +129,13 @@ module.exports={
     voter_voted_status: function(req, res){
         const username = req.body.username;
         console.log(username)
-        const add1 = req.body.fptp_hor_ethAddress;
-        const add2 = req.body.fptp_pa_ethAddress;
-        const add3 = req.body.pr_hor_ethAddress;
-        const add4 = req.body.pr_pa_ethAddress;
+        const add1 = req.body.fptp_hor_ethaddress;
+        const add2 = req.body.fptp_pa_ethaddress;
+        const add3 = req.body.pr_hor_ethaddress;
+        const add4 = req.body.pr_pa_ethaddress;
         const token = req.body.token;
         console.log('################################ ', token);
+
 
         if(token){
             jwt.verify(token, config.secret, function(error, decoded){
@@ -149,6 +152,8 @@ module.exports={
                                 console.log('found voter ');
                                 result.voted=true;
                                 result.save();
+                                console.log("***********************************************");
+                                console.log(typeof(add1));
                                 config.db.insert({ voter_address: result.ethAddress, candidate_address: add1, txHash: null, timestamp: Date.now() });
                                 config.db.insert({ voter_address: result.ethAddress, candidate_address: add2, txHash: null, timestamp: Date.now() });
                                 config.db.insert({ voter_address: result.ethAddress, candidate_address: add3, txHash: null, timestamp: Date.now() });
