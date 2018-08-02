@@ -88,7 +88,7 @@ app.use((req, res, next) => {
                     fs.writeFileSync('./logs/tokenTransfer.log', data.blockNumber + 1);
                     console.log(data.returnValues);
                     
-                    config.db.remove({ voter_address: data.returnValues.from, candidate_address: data.returnValues.to }, { multi: false }, function (err, number) {
+                    config.db.remove({ voter_address: data.returnValues[0], candidate_address: data.returnValues[1] }, function (err, number) {
                         if (!err) console.log("removed data: ", number);
                     });
 
