@@ -35,12 +35,12 @@ module.exports={
         booth_model.findById(boothAddress, function(err, result){
             console.log(result);
             if(err){
-                res.status(401).send(err);
+                res.status(500).send(err);
                 return;
             }
 
             if(result==null){
-                res.status(401).send({
+                res.status(403).send({
                     'message': 'Booth is not authorized.'
                 });
                 return;
@@ -77,7 +77,7 @@ module.exports={
                 }
                 else{
                     if(result==null){
-                        res.status(401).send({
+                        res.status(404).send({
                             'message': 'Voter Not found.'
                         })
                         return;
