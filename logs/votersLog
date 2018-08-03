@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"voter_address":"0x5AC54654BC0662573D952723DED2Ac358dEC453C","candidate_address":"0xbAE1bf18A53CE4C6afB7d8E0D96368d34f5056b2","txHash":null,"timestamp":1533137403283,"_id":"3FVhW6ladT8P84bN"}
 {"voter_address":"0x038f17665881F65DbE719763A2d6f2375fe1e594","candidate_address":"0xbAE1bf18A53CE4C6afB7d8E0D96368d34f5056b2","txHash":null,"timestamp":1533270889523,"_id":"6vAtmPuzN9wPUt5g"}
 {"voter_address":"0x5AC54654BC0662573D952723DED2Ac358dEC453C","candidate_address":"0x1194b4764dCc700f32d5049cB1127290c9Ed65c6","txHash":null,"timestamp":1533137403283,"_id":"99wI5c9grz9hC9bt"}
@@ -18,3 +19,5 @@
 {"voter_address":"0x038f17665881F65DbE719763A2d6f2375fe1e594","candidate_address":"0x8b10D4C13A089D2f49a65CB5C12E0d21575410E7","txHash":null,"timestamp":1533270889523,"_id":"tFLoSuZCdwUf1cb7"}
 {"voter_address":"0x038f17665881F65DbE719763A2d6f2375fe1e594","candidate_address":"0x8F4D18a8263Dc9Ca74D00B1d78eAC1b07E76B2ca","txHash":null,"timestamp":1533270889523,"_id":"yNrUIxMRFHTLkCEt"}
 {"voter_address":"0x5AC54654BC0662573D952723DED2Ac358dEC453C","candidate_address":"0x8b10D4C13A089D2f49a65CB5C12E0d21575410E7","txHash":null,"timestamp":1533137403283,"_id":"zlFSn3I2EoRdxaKt"}
+=======
+>>>>>>> 18242539bada5900aea9d13c57cad20b6bbec2bf
