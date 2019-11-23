@@ -1,4 +1,4 @@
-<h1>API for VFC </h1>
+<h1>API for Vote For Change. (VFC) </h1>
 
 See the routes in order to understand the urls and their functions.
 * Booth_address is must to access API functions.
